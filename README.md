@@ -15,25 +15,25 @@ A high-performance, modular **Retrieval-Augmented Generation (RAG)** pipeline de
 graph TD
     %% Ingestion Pipeline
     subgraph Ingestion ["📥 Ingestion Pipeline"]
-        style Ingestion fill:#f5faff,stroke:#0055b3,stroke-width:2px
-        Upload["User Uploads PDFs"] --> Extractor["<b>Ingestion Service</b><br/>Text extraction via pypdf"]
-        Extractor --> Splitter["<b>Chunking Service</b><br/>Hybrid: Semantic + Sliding Window"]
-        Splitter --> EmbedText["<b>Embedding Service</b><br/>Generate Vectors"]
-        EmbedText --> StoreFAISS[("<b>Vector Storage</b><br/>FAISS Index<br/><i>Local Storage</i>")]
+        style Ingestion stroke:#0055b3,stroke-width:2px
+        Upload["User Uploads PDFs"] --> Extractor["<font color='black'><b>Ingestion Service</b></font><br/><font color='black'>Text extraction via pypdf</font>"]
+        Extractor --> Splitter["<font color='black'><b>Chunking Service</b></font><br/><font color='black'>Hybrid: Semantic + Sliding Window</font>"]
+        Splitter --> EmbedText["<font color='black'><b>Embedding Service</b></font><br/><font color='black'>Generate Vectors</font>"]
+        EmbedText --> StoreFAISS[("<font color='black'><b>Vector Storage</b></font><br/><font color='black'>FAISS Index</font><br/><font color='black'><i>Local Storage</i></font>")]
     end
 
     %% Retrieval Pipeline
     subgraph Retrieval ["🔍 Retrieval Pipeline"]
-        style Retrieval fill:#fff9f5,stroke:#b35900,stroke-width:2px
-        Query["User Search Query"] --> EmbedQuery["<b>Embedding Service</b><br/>Vectorize Query"]
-        EmbedQuery --> VectorSearch["<b>Vector Search</b><br/>Query FAISS Index"]
-        VectorSearch --> Context["<b>Context Preparation</b><br/>Top K Relevant Chunks"]
-        Context --> Router["<b>LLM Router</b><br/>LiteLLM Dual Routing"]
+        style Retrieval stroke:#b35900,stroke-width:2px
+        Query["User Search Query"] --> EmbedQuery["<font color='black'><b>Embedding Service</b></font><br/><font color='black'>Vectorize Query</font>"]
+        EmbedQuery --> VectorSearch["<font color='black'><b>Vector Search</b></font><br/><font color='black'>Query FAISS Index</font>"]
+        VectorSearch --> Context["<font color='black'><b>Context Preparation</b></font><br/><font color='black'>Top K Relevant Chunks</font>"]
+        Context --> Router["<font color='black'><b>LLM Router</b></font><br/><font color='black'>LiteLLM Dual Routing</font>"]
         
-        Router --> Gemini["<b>Google Gemini</b><br/>Cloud Model"]
-        Router --> Ollama["<b>Ollama (Local)</b><br/>Local Model"]
+        Router --> Gemini["<font color='black'><b>Google Gemini</b></font><br/><font color='black'>Cloud Model</font>"]
+        Router --> Ollama["<font color='black'><b>Ollama (Local)</b></font><br/><font color='black'>Local Model</font>"]
         
-        Gemini --> Results["<b>AI Retrieval Analyzer</b><br/>Display Answers & Metrics"]
+        Gemini --> Results["<font color='black'><b>AI Retrieval Analyzer</b></font><br/><font color='black'>Display Answers & Metrics</font>"]
         Ollama --> Results
     end
 
@@ -41,7 +41,7 @@ graph TD
     StoreFAISS -.->|Persistent Index| VectorSearch
 
     %% Styling
-    classDef service fill:#fff,stroke:#333,stroke-width:1px;
+    classDef service fill:#fff,stroke:#333,stroke-width:1px,color:black;
     class Extractor,Splitter,EmbedText,EmbedQuery,VectorSearch,Router,Gemini,Ollama service;
     class StoreFAISS service;
 ```
