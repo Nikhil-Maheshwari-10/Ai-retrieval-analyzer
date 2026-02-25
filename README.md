@@ -1,7 +1,7 @@
 # 🚀 AI Retrieval Analyzer
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.42.0-FF4B4B.svg)](https://streamlit.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.54.0-FF4B4B.svg)](https://streamlit.io/)
 [![LiteLLM](https://img.shields.io/badge/Powered%20by-LiteLLM-green.svg)](https://github.com/BerriAI/litellm)
 [![FAISS](https://img.shields.io/badge/Vector%20DB-FAISS-blue.svg)](https://github.com/facebookresearch/faiss)
 
@@ -65,18 +65,18 @@ graph TD
 
 ```bash
 ├── app/
-│   ├── schema/         # Pydantic schemas for data validation
-│   └── service/        # Core RAG logic
-│       ├── ingestion.py   # PDF text extraction
-│       ├── chunking.py    # Text splitting strategies
-│       ├── embeddings.py  # Vector generation (Sentence-Transformers)
-│       ├── retrieval.py   # FAISS management and search
-│       └── llm_router.py  # LiteLLM routing logic
-├── core/               # App configuration and logging
-├── data/               # Local storage for PDFs and FAISS indices (Gitignored)
-├── model/              # Local storage for embedding models (Gitignored)
-├── ui/                 # Streamlit frontend implementation
-└── main.py             # Entry point script
+│   ├── schema/               # Pydantic schemas for data validation
+│   └── service/              # Core RAG logic
+│       ├── ingestion.py      # PDF text extraction
+│       ├── chunking.py       # Text splitting strategies
+│       ├── embeddings.py     # Vector generation
+│       ├── retrieval.py      # FAISS management and search
+│       └── llm_router.py     # LiteLLM routing logic
+├── core/                     # App configuration and logging
+├── data/                     # Local storage for PDFs and FAISS indices (Gitignored)
+├── model/                    # Local storage for embedding model (Gitignored)
+├── ui/                       # Streamlit frontend implementation
+└── main.py                   # Entry point script
 ```
 
 ---
@@ -85,7 +85,7 @@ graph TD
 
 ### Prerequisites
 - Python 3.11+
-- [Ollama](https://ollama.com/) (installed and running)
+- [Ollama](https://ollama.com/)
 - Google Gemini API Key
 
 ### 🛠️ Installation & Setup
@@ -108,7 +108,7 @@ poetry install
 **Option B: Using Pip & Virtual Environment (venv)**
 ```bash
 # Create a virtual environment
-python -m venv venv
+python3 -m venv venv
 
 # Activate the environment
 
@@ -122,8 +122,22 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-3. **Environment Setup**:
-   Create a `.env` file in the root directory:
+#### 3. Ollama Setup
+Ensure [Ollama](https://ollama.com/) is installed and running on your machine.
+
+```bash
+# Verify Ollama is running
+ollama --version
+
+# Pull the model you configured in .env
+ollama pull your_ollama_model_name
+
+# (Optional) Verify the model is installed
+ollama list
+```
+
+#### 4. Environment Setup
+Create a `.env` file in the root directory:
    ```env
    # Embedding Configuration
    EMBEDDING_MODEL=your_embedding_model_name
