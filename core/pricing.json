@@ -1,0 +1,22 @@
+{
+    "gemini-2.5-flash-lite": {
+        "input_price_per_1m": 0.10,
+        "output_price_per_1m": 0.40
+    },
+    "gemini-2.5-flash": {
+        "input_price_per_1m": 0.30,
+        "output_price_per_1m": 2.50
+    },
+    "gemini-2.0-flash": {
+        "input_price_per_1m": 0.10,
+        "output_price_per_1m": 0.40
+    },
+    "gemini-2.0-flash-lite": {
+        "input_price_per_1m": 0.075,
+        "output_price_per_1m": 0.30
+    },
+    "ollama_default": {
+        "input_price_per_1m": 0.0,
+        "output_price_per_1m": 0.0
+    }
+}

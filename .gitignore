@@ -1,0 +1,14 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# Environment and Secrets
+.env
+.venv/
+
+# Project Data (PDFs and Indices)
+data/
+model/
+
+# OS specific
+.DS_Store
