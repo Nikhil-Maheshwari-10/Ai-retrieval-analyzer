@@ -14,24 +14,26 @@ A high-performance, modular **Retrieval-Augmented Generation (RAG)** pipeline de
 ```mermaid
 graph TD
     %% Ingestion Pipeline
-    subgraph Ingestion [Ingestion Pipeline]
+    subgraph Ingestion ["📥 Ingestion Pipeline"]
         style Ingestion fill:#f5faff,stroke:#0055b3,stroke-width:2px
-        Upload[User Uploads PDFs] --> Extractor[<b>Ingestion Service</b><br/>Extract text via pypdf]
-        Extractor --> Splitter[<b>Chunking Service</b><br/>Hybrid: Semantic + Sliding Window<br/><i>Size: 500, Overlap: 75</i>]
-        Splitter --> EmbedText[<b>Embedding Service</b><br/>Generate Embeddings<br/><i>all-MiniLM-L6-v2</i>]
-        EmbedText --> StoreFAISS[<b>Vector Storage</b><br/>FAISS Index<br/><i>Local Persistence</i>]
+        Upload["User Uploads PDFs"] --> Extractor["<b>Ingestion Service</b><br/>Text extraction via pypdf"]
+        Extractor --> Splitter["<b>Chunking Service</b><br/>Hybrid: Semantic + Sliding Window"]
+        Splitter --> EmbedText["<b>Embedding Service</b><br/>Generate Vectors"]
+        EmbedText --> StoreFAISS[("<b>Vector Storage</b><br/>FAISS Index<br/><i>Local Storage</i>")]
     end
 
     %% Retrieval Pipeline
-    subgraph Retrieval [Retrieval Pipeline]
+    subgraph Retrieval ["🔍 Retrieval Pipeline"]
         style Retrieval fill:#fff9f5,stroke:#b35900,stroke-width:2px
-        Query[User Enters Query] --> EmbedQuery[<b>Embedding Service</b><br/>Generate Query Embedding]
-        EmbedQuery --> VectorSearch[<b>Vector Search</b><br/>Search FAISS Index]
-        VectorSearch --> Context[<b>Context Prep</b><br/>Retrieve Top K Chunks]
-        Context --> Router[<b>LLM Router</b><br/>Route to Dual Providers]
-        Router --> Gemini[<b>Gemini 2.5 Flash</b><br/>Cloud Inference]
-        Router --> Ollama[<b>Ollama (Gemma 3)</b><br/>Local Inference]
-        Gemini --> Results[<b>Metrics Dashboard</b><br/>Display Answers & Latency]
+        Query["User Search Query"] --> EmbedQuery["<b>Embedding Service</b><br/>Vectorize Query"]
+        EmbedQuery --> VectorSearch["<b>Vector Search</b><br/>Query FAISS Index"]
+        VectorSearch --> Context["<b>Context Preparation</b><br/>Top K Relevant Chunks"]
+        Context --> Router["<b>LLM Router</b><br/>LiteLLM Dual Routing"]
+        
+        Router --> Gemini["<b>Google Gemini</b><br/>Cloud Model"]
+        Router --> Ollama["<b>Ollama (Local)</b><br/>Local Model"]
+        
+        Gemini --> Results["<b>AI Retrieval Analyzer</b><br/>Display Answers & Metrics"]
         Ollama --> Results
     end
 
@@ -40,7 +42,8 @@ graph TD
 
     %% Styling
     classDef service fill:#fff,stroke:#333,stroke-width:1px;
-    class Extractor,Splitter,EmbedText,StoreFAISS,EmbedQuery,VectorSearch,Router,Gemini,Ollama service;
+    class Extractor,Splitter,EmbedText,EmbedQuery,VectorSearch,Router,Gemini,Ollama service;
+    class StoreFAISS service;
 ```
 
 ---
