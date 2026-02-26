@@ -15,42 +15,40 @@ class LLMRouter:
         """
         Checks if the configured Ollama model exists locally, pulls it if not.
         """
+        model_full_name = settings.OLLAMA_MODEL
         try:
-            model_full_name = settings.OLLAMA_MODEL
-            model_base_name = model_full_name.split(":")[0]
+            client = ollama.Client(host=settings.OLLAMA_HOST)
             
             # List local models
-            resp = ollama.list()
-            # Handle different library versions (list vs response object)
+            logger.info(f"Checking Ollama models at {settings.OLLAMA_HOST}...")
+            resp = client.list()
             models = resp.models if hasattr(resp, 'models') else (resp if isinstance(resp, list) else [])
             
-            # Extract names from Model objects or dicts
             installed_names = []
             for m in models:
                 name = getattr(m, 'model', getattr(m, 'name', None))
                 if name:
                     installed_names.append(name)
             
-            # Check if model exists
-            exists = any(name == model_full_name or name.startswith(f"{model_base_name}:") for name in installed_names)
+            # Precise check
+            exists = any(name == model_full_name for name in installed_names)
             
             if exists:
-                logger.info(f"Ollama model '{model_full_name}' is confirmed locally.")
+                logger.success(f"Ollama model '{model_full_name}' is ready.")
             else:
-                logger.warning(f"Ollama model '{model_full_name}' NOT found locally. Starting auto-pull...")
+                logger.warning(f"Ollama model '{model_full_name}' NOT found. Starting pull...")
                 
                 # Pull with streaming progress
                 current_status = ""
-                for progress in ollama.pull(model_full_name, stream=True):
+                for progress in client.pull(model_full_name, stream=True):
                     status = progress.get('status')
                     if status and status != current_status:
-                        logger.info(f"Ollama Pull Status: {status}")
+                        logger.info(f"Pulling {model_full_name}: {status}")
                         current_status = status
                         
-                logger.success(f"Successfully pulled and verified '{model_full_name}'")
+                logger.success(f"Successfully pulled '{model_full_name}'")
         except Exception as e:
-            logger.error(f"Failed to check/pull Ollama model: {e}")
-            # We don't raise here to allow Gemini fallback if Ollama is totally down
+            logger.error(f"Ollama setup failed: {e}")
 
     def _prepare_prompt(self, query: str, context: List[DocumentChunk]) -> str:
         context_text = "\n\n".join([f"Source: {c.source}\nContent: {c.text}" for c in context])
